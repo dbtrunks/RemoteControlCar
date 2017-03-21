@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net;
+using System.Net.Sockets;
 
 namespace RRC_Forms
 {
@@ -17,11 +19,19 @@ namespace RRC_Forms
             InitializeComponent();
         }
 
-        private void btn_onOff_Click(object sender, EventArgs e)
+        private Socket _server;
+        private IPEndPoint _endpoint;
+        
+        private void Btn_onOff_Click(object sender, EventArgs e)
         {
             var button = sender as Button;
             if (button.BackColor == Color.Lime)
             {
+                _server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
+                IPAddress broadcast = IPAddress.Parse("192.168.33.60");
+                _endpoint = new IPEndPoint(broadcast, 2807);
+
                 button.Text = "Odłacz";
                 button.BackColor = Color.OrangeRed;
             }
@@ -33,66 +43,122 @@ namespace RRC_Forms
             lb_log.Focus();
         }
 
+        private bool pressUp, pressDown, pressLeft, pressRight;
         private void Form_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyValue)
+            switch (e.KeyCode)
             {
-                case 37:
-                    leftAction();
+                case Keys.Left:
+                    pressLeft=true;
                 break;
-                case 38:
-                    upAction();
+                case Keys.Up:
+                    pressUp = true;
                     break;
-                case 39:
-                    rightAction();
+                case Keys.Right:
+                    pressRight = true;
                     break;
-                case 40:
-                    downAction();
+                case Keys.Down:
+                    pressDown = true;
+                    pressUp = false;
+                    break;
+            }
+
+            if (pressUp)
+                UpAction();
+            if (pressLeft)
+                LeftAction();
+            if (pressRight)
+                RightAction(); 
+            if (pressDown)
+                DownAction();
+
+        }
+
+        private void Form_KeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Left:
+                    pressLeft = false;
+                    break;
+                case Keys.Up:
+                    pressUp = false;
+                    break;
+                case Keys.Right:
+                    pressRight = false;
+                    break;
+                case Keys.Down:
+                    pressDown = false;
                     break;
             }
 
         }
-        private void btn_Click(object sender, EventArgs e)
+        private void Btn_Click(object sender, EventArgs e)
         {
             var btn = sender as Button;
             switch (btn.Name)
             {
                 case "btn_left":
-                    leftAction();
+                    LeftAction();
                     break;
                 case "btn_up":
-                    upAction();
+                    UpAction();
                     break;
                 case "btn_right":
-                    rightAction();
+                    RightAction();
                     break;
                 case "btn_down":
-                    downAction();
+                    DownAction();
                     break;
             }
             lb_log.Focus();
         }
 
-        private void btn_Key(object sender, EventArgs e)
+        private void Btn_Key(object sender, EventArgs e)
         {
             lb_log.Focus();
+
         }
 
-        private void leftAction()
+        private void LeftAction()
         {
-            tb_log.Text = "left";
+            Log("left");
+            SendMasage("L");
         }
-        private void upAction()
+        private void UpAction()
         {
-            tb_log.Text = "up";
+            Log("up");
+            SendMasage("U");
         }
-        private void rightAction()
+        private void RightAction()
         {
-            tb_log.Text = "right";
+            Log("right");
+            SendMasage("R");
         }
-        private void downAction()
+
+        private void tb_log_TextChanged(object sender, EventArgs e)
         {
-            tb_log.Text = "down";
+            tb_log.SelectionStart = tb_log.Text.Length;
+            tb_log.ScrollToCaret();
         }
+
+        private void DownAction()
+        {
+            Log("down");
+            SendMasage("D");
+        }
+
+        private void SendMasage(string mes)
+        {
+            byte[] sendbuf = Encoding.ASCII.GetBytes(mes);
+            if (_server != null)
+                _server.SendTo(sendbuf, _endpoint);
+        }
+
+        private void Log(string text)
+        {
+            tb_log.Text += text;
+        }
+
     }
 }

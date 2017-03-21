@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form));
-            this.pb_screen = new System.Windows.Forms.PictureBox();
             this.tb_log = new System.Windows.Forms.TextBox();
+            this.pb_screen = new System.Windows.Forms.PictureBox();
             this.lb_log = new System.Windows.Forms.Label();
             this.btn_onOff = new System.Windows.Forms.Button();
             this.btn_up = new System.Windows.Forms.Button();
@@ -42,15 +42,6 @@
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // pb_screen
-            // 
-            this.pb_screen.Image = ((System.Drawing.Image)(resources.GetObject("pb_screen.Image")));
-            this.pb_screen.Location = new System.Drawing.Point(74, 12);
-            this.pb_screen.Name = "pb_screen";
-            this.pb_screen.Size = new System.Drawing.Size(320, 240);
-            this.pb_screen.TabIndex = 0;
-            this.pb_screen.TabStop = false;
-            // 
             // tb_log
             // 
             this.tb_log.Location = new System.Drawing.Point(12, 279);
@@ -61,6 +52,16 @@
             this.tb_log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tb_log.Size = new System.Drawing.Size(440, 270);
             this.tb_log.TabIndex = 1;
+            this.tb_log.TextChanged += new System.EventHandler(this.tb_log_TextChanged);
+            // 
+            // pb_screen
+            // 
+            this.pb_screen.Image = ((System.Drawing.Image)(resources.GetObject("pb_screen.Image")));
+            this.pb_screen.Location = new System.Drawing.Point(74, 12);
+            this.pb_screen.Name = "pb_screen";
+            this.pb_screen.Size = new System.Drawing.Size(320, 240);
+            this.pb_screen.TabIndex = 0;
+            this.pb_screen.TabStop = false;
             // 
             // lb_log
             // 
@@ -83,7 +84,7 @@
             this.btn_onOff.TabStop = false;
             this.btn_onOff.Text = "Połącz";
             this.btn_onOff.UseVisualStyleBackColor = false;
-            this.btn_onOff.Click += new System.EventHandler(this.btn_onOff_Click);
+            this.btn_onOff.Click += new System.EventHandler(this.Btn_onOff_Click);
             // 
             // btn_up
             // 
@@ -94,11 +95,11 @@
             this.btn_up.TabStop = false;
             this.btn_up.Text = "/\\";
             this.btn_up.UseVisualStyleBackColor = true;
-            this.btn_up.Click += new System.EventHandler(this.btn_Click);
-            this.btn_up.KeyDown += new System.Windows.Forms.KeyEventHandler(this.btn_Key);
-            this.btn_up.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.btn_Key);
-            this.btn_up.KeyUp += new System.Windows.Forms.KeyEventHandler(this.btn_Key);
-            this.btn_up.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.btn_Key);
+            this.btn_up.Click += new System.EventHandler(this.Btn_Click);
+            this.btn_up.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Btn_Key);
+            this.btn_up.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Btn_Key);
+            this.btn_up.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Btn_Key);
+            this.btn_up.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Btn_Key);
             // 
             // btn_down
             // 
@@ -109,7 +110,7 @@
             this.btn_down.TabStop = false;
             this.btn_down.Text = "\\/";
             this.btn_down.UseVisualStyleBackColor = true;
-            this.btn_down.Click += new System.EventHandler(this.btn_Click);
+            this.btn_down.Click += new System.EventHandler(this.Btn_Click);
             // 
             // btn_right
             // 
@@ -120,7 +121,7 @@
             this.btn_right.TabStop = false;
             this.btn_right.Text = ">";
             this.btn_right.UseVisualStyleBackColor = true;
-            this.btn_right.Click += new System.EventHandler(this.btn_Click);
+            this.btn_right.Click += new System.EventHandler(this.Btn_Click);
             // 
             // btn_left
             // 
@@ -131,8 +132,8 @@
             this.btn_left.TabStop = false;
             this.btn_left.Text = "<";
             this.btn_left.UseVisualStyleBackColor = true;
-            this.btn_left.Click += new System.EventHandler(this.btn_Click);
-            this.btn_left.KeyDown += new System.Windows.Forms.KeyEventHandler(this.btn_Key);
+            this.btn_left.Click += new System.EventHandler(this.Btn_Click);
+            this.btn_left.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Btn_Key);
             // 
             // panel1
             // 
@@ -162,6 +163,7 @@
             this.Name = "Form";
             this.Text = "RemoteControlCar";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form_KeyUp);
             ((System.ComponentModel.ISupportInitialize)(this.pb_screen)).EndInit();
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -172,7 +174,6 @@
         #endregion
 
         private System.Windows.Forms.PictureBox pb_screen;
-        private System.Windows.Forms.TextBox tb_log;
         private System.Windows.Forms.Label lb_log;
         private System.Windows.Forms.Button btn_onOff;
         private System.Windows.Forms.Button btn_up;
@@ -180,6 +181,7 @@
         private System.Windows.Forms.Button btn_right;
         private System.Windows.Forms.Button btn_left;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox tb_log;
     }
 }
 
