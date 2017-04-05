@@ -159,7 +159,9 @@
             this.Controls.Add(this.lb_log);
             this.Controls.Add(this.tb_log);
             this.Controls.Add(this.pb_screen);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.KeyPreview = true;
+            this.MaximizeBox = false;
             this.Name = "Form";
             this.Text = "RemoteControlCar";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form_KeyDown);
