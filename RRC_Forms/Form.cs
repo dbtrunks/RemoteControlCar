@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
+using NativeWifi;
 
 namespace RRC_Forms
 {
@@ -21,7 +22,8 @@ namespace RRC_Forms
 
         private Socket _server;
         private IPEndPoint _endpoint;
-        
+
+
         private void Btn_onOff_Click(object sender, EventArgs e)
         {
             var button = sender as Button;
@@ -31,9 +33,15 @@ namespace RRC_Forms
 
                 IPAddress broadcast = IPAddress.Parse("192.168.33.60");
                 _endpoint = new IPEndPoint(broadcast, 2807);
-
-                button.Text = "Odłacz";
-                button.BackColor = Color.OrangeRed;
+                using (var formWifiScan = new FormWiFiScan())
+                {
+                    formWifiScan.ShowDialog();
+                    if (formWifiScan.IsConnected)
+                    {
+                        button.Text = "Odłacz";
+                        button.BackColor = Color.OrangeRed;
+                    }
+                }
             }
             else
             {
@@ -43,14 +51,17 @@ namespace RRC_Forms
             lb_log.Focus();
         }
 
+
+
+
         private bool pressUp, pressDown, pressLeft, pressRight;
         private void Form_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
                 case Keys.Left:
-                    pressLeft=true;
-                break;
+                    pressLeft = true;
+                    break;
                 case Keys.Up:
                     pressUp = true;
                     break;
@@ -68,7 +79,7 @@ namespace RRC_Forms
             if (pressLeft)
                 LeftAction();
             if (pressRight)
-                RightAction(); 
+                RightAction();
             if (pressDown)
                 DownAction();
 
