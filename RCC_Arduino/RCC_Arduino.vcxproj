@@ -77,6 +77,9 @@
     <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="DC motor.ino">
+      <FileType>CppCode</FileType>
+    </None>
     <None Include="RCC_Arduino.ino">
       <FileType>CppCode</FileType>
     </None>

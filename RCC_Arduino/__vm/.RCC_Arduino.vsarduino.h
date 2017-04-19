@@ -106,4 +106,5 @@ typedef long __PTRDIFF_TYPE__;
 #define noInterrupts() cli()
 
 #include "RCC_Arduino.ino"
+#include "DC motor.ino"
 #endif
