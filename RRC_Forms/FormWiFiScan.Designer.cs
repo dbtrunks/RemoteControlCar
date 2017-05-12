@@ -51,9 +51,9 @@
             this.label1.Font = new System.Drawing.Font("Lucida Sans Unicode", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
             this.label1.Location = new System.Drawing.Point(73, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(211, 25);
+            this.label1.Size = new System.Drawing.Size(213, 25);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Podłącz się z RRC";
+            this.label1.Text = "Podłącz się z RCC";
             // 
             // tabPanel
             // 

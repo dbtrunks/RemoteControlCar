@@ -22,5 +22,29 @@ namespace RRC_Forms.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.4.1")]
+        public string ConnectedIP {
+            get {
+                return ((string)(this["ConnectedIP"]));
+            }
+            set {
+                this["ConnectedIP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4210")]
+        public int ConnectedPort {
+            get {
+                return ((int)(this["ConnectedPort"]));
+            }
+            set {
+                this["ConnectedPort"] = value;
+            }
+        }
     }
 }

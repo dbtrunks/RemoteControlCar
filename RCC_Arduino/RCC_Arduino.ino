@@ -1,79 +1,78 @@
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 
-const char* ssid = ""; // "podaæ";
-const char* password = ""; //"podaæ";
-int ledPin = 2; // D4
-int ledPin2 = 12; // D6
+WiFiUDP Udp;
 
-WiFiUDP UDPTestServer;
-unsigned int UDPPort = 2807;
+const char *APssid = "RCC";
+const char *APpassword = "123rcc"; 
+IPAddress APlocal_IP(192, 168, 4, 1);
+IPAddress APgateway(192, 168, 4, 1);
+IPAddress APsubnet(255, 255, 255, 0);
+int ledPin = 5; // D1
+int ledPin2 = 4; // D2
 
-const int packetSize = 1;
-byte packetBuffer[packetSize];
+
+unsigned int localUdpPort = 4210;
+char incomingPacket[255];
+char replyPacket[] = "Hi there! Got the message :-)";
 char comChar;
-void setup() {
-	Serial.begin(115200);
-	delay(10);
 
+
+void setup() {
+	Serial.begin(115200); 
 	pinMode(ledPin, OUTPUT);
 	digitalWrite(ledPin, LOW);
 	pinMode(ledPin2, OUTPUT);
 	digitalWrite(ledPin2, LOW);
 
+	WiFi.mode(WIFI_AP_STA);
+
+	Serial.println(WiFi.softAPConfig(APlocal_IP, APgateway, APsubnet) ? "OK" : "Failed!"); 
+	Serial.print("Setting soft-AP ... ");
+	Serial.println(WiFi.softAP(APssid, APpassword) ? "OK" : "Failed!");
+	Serial.print("Soft-AP IP address = ");
+	Serial.println(WiFi.softAPIP()); 
 	Serial.println();
-	Serial.println();
-	Serial.print("Connecting to ");
-	Serial.println(ssid);
-
-	WiFi.begin(ssid, password);
-	WiFi.config(IPAddress(192, 168, 33, 60), IPAddress(192, 168, 33, 1), IPAddress(255, 255, 255, 0));
-
-	while (WiFi.status() != WL_CONNECTED) {
-		delay(500);
-		Serial.print(".");
-	}
-
-	Serial.println("");
-	Serial.println("WiFi connected");
-	Serial.println("IP address: ");
+	Serial.print("Station connected, IP address: ");
 	Serial.println(WiFi.localIP());
+	Serial.printf("Signal Strength: %d dBm\n", WiFi.RSSI());
 
-	UDPTestServer.begin(UDPPort);
+	Serial.println("begin UDP port");
+	Udp.begin(localUdpPort);
+	Serial.print("local UDP port: ");
+	Serial.println(localUdpPort);
+
 
 }
-
-int value = 0;
 
 void loop() {
-	handleUDPServer();
-	delay(1);
-}
 
-void handleUDPServer() {
-	int cb = UDPTestServer.parsePacket();
-	if (cb) {
-		UDPTestServer.read(packetBuffer, packetSize);
-		String myData = "";
-		for (int i = 0; i < packetSize; i++) {
-			myData += (char)packetBuffer[i];
+	int packetSize = Udp.parsePacket();
+	if (packetSize)
+	{
+		
+		int len = Udp.read(incomingPacket, 255);
+		if (len > 0)
+		{
+			incomingPacket[len] = 0;
+
+			comChar = incomingPacket[0];
+			switch (comChar) {
+			case 'A':
+				digitalWrite(ledPin2, LOW);
+				digitalWrite(ledPin, HIGH);
+				break;
+			case 'D':
+				digitalWrite(ledPin, LOW);
+				digitalWrite(ledPin2, HIGH);
+				break;
+			default:
+				digitalWrite(ledPin, LOW);
+				digitalWrite(ledPin2, LOW);
+				break;
+			}
 		}
-		Serial.println(myData);
 
-		comChar = myData.charAt(0);
-
-
-		switch (comChar) {
-		case 'A':
-			digitalWrite(ledPin, HIGH);
-			break;
-		case 'D':
-			digitalWrite(ledPin2, HIGH);
-			break;
-		default:
-			digitalWrite(ledPin, LOW);
-			digitalWrite(ledPin2, LOW);
-			break;
-		}
 	}
+
 }

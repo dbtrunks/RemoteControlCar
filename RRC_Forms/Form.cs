@@ -22,26 +22,30 @@ namespace RRC_Forms
 
         private Socket _server;
         private IPEndPoint _endpoint;
-
+        private string ip;
+        private int port;
 
         private void Btn_onOff_Click(object sender, EventArgs e)
         {
             var button = sender as Button;
             if (button.BackColor == Color.Lime)
             {
-                _server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-                IPAddress broadcast = IPAddress.Parse("192.168.33.60");
-                _endpoint = new IPEndPoint(broadcast, 2807);
                 using (var formWifiScan = new FormWiFiScan())
                 {
                     formWifiScan.ShowDialog();
                     if (formWifiScan.IsConnected)
                     {
+                        ip = formWifiScan.ConnectedIP;
+                        port = formWifiScan.ConnectedPort;
                         button.Text = "Odłacz";
                         button.BackColor = Color.OrangeRed;
                     }
                 }
+                _server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
+                IPAddress broadcast = IPAddress.Parse(ip);
+                _endpoint = new IPEndPoint(broadcast, port);
             }
             else
             {
