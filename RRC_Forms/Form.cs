@@ -24,6 +24,7 @@ namespace RRC_Forms
         private IPEndPoint _endpoint;
         private string ip;
         private int port;
+        private Keys pressKey;
 
         private void Btn_onOff_Click(object sender, EventArgs e)
         {
@@ -42,10 +43,13 @@ namespace RRC_Forms
                         button.BackColor = Color.OrangeRed;
                     }
                 }
-                _server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                if (!string.IsNullOrEmpty(ip))
+                {
+                    _server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-                IPAddress broadcast = IPAddress.Parse(ip);
-                _endpoint = new IPEndPoint(broadcast, port);
+                    IPAddress broadcast = IPAddress.Parse(ip);
+                    _endpoint = new IPEndPoint(broadcast, port);
+                }
             }
             else
             {
@@ -60,7 +64,7 @@ namespace RRC_Forms
 
         private bool pressUp, pressDown, pressLeft, pressRight;
         private void Form_KeyDown(object sender, KeyEventArgs e)
-        {
+        {           
             switch (e.KeyCode)
             {
                 case Keys.Left:
@@ -86,7 +90,7 @@ namespace RRC_Forms
                 RightAction();
             if (pressDown)
                 DownAction();
-
+            pressKey = e.KeyCode;
         }
 
         private void Form_KeyUp(object sender, KeyEventArgs e)
@@ -106,7 +110,8 @@ namespace RRC_Forms
                     pressDown = false;
                     break;
             }
-
+            pressKey = Keys.X;
+            SendMasage("x");
         }
         private void Btn_Click(object sender, EventArgs e)
         {
@@ -131,24 +136,34 @@ namespace RRC_Forms
 
         private void Btn_Key(object sender, EventArgs e)
         {
+
             lb_log.Focus();
 
         }
 
         private void LeftAction()
         {
-            Log("left");
-            SendMasage("L");
+            if (pressKey != Keys.Left)
+            {
+                Log("left");
+                SendMasage("L");
+            }
         }
         private void UpAction()
         {
-            Log("up");
-            SendMasage("U");
+            if (pressKey != Keys.Up)
+            {
+                Log("up");
+                SendMasage("U");
+            }
         }
         private void RightAction()
         {
-            Log("right");
-            SendMasage("R");
+            if (pressKey != Keys.Right)
+            {
+                Log("right");
+                SendMasage("R");
+            }
         }
 
         private void tb_log_TextChanged(object sender, EventArgs e)
@@ -159,8 +174,11 @@ namespace RRC_Forms
 
         private void DownAction()
         {
-            Log("down");
-            SendMasage("D");
+            if (pressKey != Keys.Down)
+            {
+                Log("down");
+                SendMasage("D");
+            }
         }
 
         private void SendMasage(string mes)
